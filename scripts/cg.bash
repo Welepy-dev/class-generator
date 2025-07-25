@@ -29,10 +29,10 @@ CLASSNAME=$1
 
 if $USE_FOLDER; then
 	mkdir -p src inc
-	./createCpp.bash "$CLASSNAME" "src/"
-	./createHeader.bash "$CLASSNAME" "inc/"
+	./scripts/createCpp.bash "$CLASSNAME" "src/"
+	./scripts/createHeader.bash "$CLASSNAME" "inc/"
 else
-	./createCpp.bash "$CLASSNAME"
-	./createHeader.bash "$CLASSNAME"
+	./scripts/createCpp.bash "$CLASSNAME"
+	./scripts/createHeader.bash "$CLASSNAME"
 fi
 
