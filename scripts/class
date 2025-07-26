@@ -3,8 +3,7 @@
 USE_FOLDER=false
 VERBOSE=false
 
-createHeader()
-{
+createHeader() {
     CLASSNAME=$1
     DIR=${2:-""}
 
@@ -28,53 +27,53 @@ class $CLASSNAME
 EOF
 }
 
-createCpp()
-{
-CLASSNAME=$1
-DIR=${2:-""} 
+createCpp() {
+    CLASSNAME=$1
+    HEADER_PATH=$2
+    FILE_PATH=$3
 
-cat <<EOF > "${DIR}${CLASSNAME}.cpp"
-#include "${DIR}${CLASSNAME}.hpp"
+    cat <<EOF > "${FILE_PATH}${CLASSNAME}.cpp"
+#include "${HEADER_PATH}${CLASSNAME}.hpp"
 #include <iostream>
 
 $CLASSNAME::$CLASSNAME()
 {
-	std::cout << "$CLASSNAME's default constructor called" << std::endl;
+    std::cout << "$CLASSNAME's default constructor called" << std::endl;
 } 
  
-$CLASSNAME &$CLASSNAME::operator=(const $CLASSNAME &other)
+$CLASSNAME& $CLASSNAME::operator=(const $CLASSNAME &other)
 { 
-	std::cout << "$CLASSNAME's Copy assignment operator called" << std::endl;
+    std::cout << "$CLASSNAME's copy assignment operator called" << std::endl;
 
-	//here you copy your class atribuites...
+    // Here you copy your class attributes...
 
-	return (*this);
+    return (*this);
 } 
  
 $CLASSNAME::$CLASSNAME(const $CLASSNAME &other)
 { 
-	std::cout << "$CLASSNAME's copy constructor operator called" << std::endl;
+    std::cout << "$CLASSNAME's copy constructor called" << std::endl;
  
-	*this = other;
+    *this = other;
 }
 
 $CLASSNAME::~$CLASSNAME()
 { 
-	std::cout << "$CLASSNAME's default destructor called" << std::endl;
+    std::cout << "$CLASSNAME's default destructor called" << std::endl;
 }
 EOF
 }
 
-while getopts "f" opt; do
+while getopts "fv" opt; do
 	case $opt in
 		f)
 			USE_FOLDER=true
 			;;
-		v)	#will finish this later
+		v) #define behaviour later
 			VERBOSE=true
 			;;
 		*)
-			echo "Usage: $0 [-f] ClassName"
+			echo "Usage: $0 [-f] [-v] ClassName"
 			exit 1
 			;;
 	esac
@@ -91,10 +90,9 @@ CLASSNAME=$1
 
 if $USE_FOLDER; then
 	mkdir -p src inc
-	createCpp "$CLASSNAME" "src/"
 	createHeader "$CLASSNAME" "inc/"
+	createCpp "$CLASSNAME" "../inc/" "src/"
 else
-	createCpp "$CLASSNAME"
 	createHeader "$CLASSNAME"
+	createCpp "$CLASSNAME" "" ""
 fi
-
