@@ -34,7 +34,7 @@ CLASSNAME=$1
 DIR=${2:-""} 
 
 cat <<EOF > "${DIR}${CLASSNAME}.cpp"
-#include "${CLASSNAME}.hpp"
+#include "${DIR}${CLASSNAME}.hpp"
 #include <iostream>
 
 $CLASSNAME::$CLASSNAME()
